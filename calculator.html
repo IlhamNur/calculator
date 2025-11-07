@@ -1,55 +1,247 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script>
-        function hitung(e) {
-            e.preventDefault()
-            let angka_first = parseInt(document.getElementById("angka_first").value, 10)
-            let angka_second = parseInt(document.getElementById("angka_second").value, 10)
-            let operation = document.getElementById("operation").value
-            if (operation == "+") {
-                let hasil = angka_first + angka_second
-                document.getElementById("result").value = hasil
-            }
-            else if (operation == "-") {
-                let hasil = angka_first - angka_second
-                document.getElementById("result").value = hasil
-            }
-            else if (operation == "/") {
-                let hasil = angka_first / angka_second
-                document.getElementById("result").value = hasil
-            }
-            else if (operation == "*") {
-                let hasil = angka_first * angka_second
-                document.getElementById("result").value = hasil
-            }
-        }
-    </script>
-</head>
-<body>
-    <h1>Kalkulator Sederhana</h1>
-    <form action="">
-        <div style="margin-bottom: 10px;">
-            <input type="number" placeholder="Angka Pertama" id="angka_first">
-            <span>
-                <select id="operation" name="operation" onchange="hitung()">
-                    <option value="+">+</option>
-                    <option value="-">-</option>
-                    <option value="/">:</option>
-                    <option value="*">x</option>
-                </select>
-            </span>
-            <input type="number" placeholder="Angka Kedua" id="angka_second">
-            <span>=</span>
-            <input type="number" placeholder="Hasil" id="result">
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator Modern</title>
+    <style>
+      :root {
+        --bg: #f3f4f6;
+        --text: #333;
+        --card: #fff;
+        --button: #2563eb;
+        --button-hover: #1d4ed8;
+      }
+
+      body.dark {
+        --bg: #111827;
+        --text: #f9fafb;
+        --card: #1f2937;
+        --button: #3b82f6;
+        --button-hover: #60a5fa;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        transition: background 0.3s, color 0.3s;
+      }
+
+      .calc-container {
+        background: var(--card);
+        padding: 25px 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        width: 340px;
+        text-align: center;
+        transition: background 0.3s;
+      }
+
+      h1 {
+        margin-bottom: 15px;
+      }
+
+      input,
+      select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 5px;
+        width: 80px;
+        text-align: center;
+        background: var(--card);
+        color: var(--text);
+        transition: background 0.3s, color 0.3s;
+      }
+
+      #result {
+        background: #f9f9f9;
+        font-weight: bold;
+        color: #111;
+      }
+
+      body.dark #result {
+        background: #374151;
+        color: #fff;
+      }
+
+      button {
+        background-color: var(--button);
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 10px 5px;
+        font-size: 15px;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: var(--button-hover);
+      }
+
+      .error {
+        color: #dc2626;
+        font-size: 14px;
+        margin-top: 6px;
+      }
+
+      .theme-toggle {
+        background: transparent;
+        border: 1px solid var(--text);
+        color: var(--text);
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .history {
+        text-align: left;
+        margin-top: 20px;
+        font-size: 14px;
+        max-height: 150px;
+        overflow-y: auto;
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+      }
+
+      .history-item {
+        margin: 4px 0;
+        font-family: monospace;
+      }
+
+      .history-item span {
+        color: #2563eb;
+      }
+
+      body.dark .history-item span {
+        color: #60a5fa;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calc-container">
+      <h1>Kalkulator Modern</h1>
+      <form id="calc-form">
+        <div>
+          <input
+            type="number"
+            id="angka_first"
+            placeholder="Angka 1"
+            required
+          />
+          <select id="operation">
+            <option value="+">+</option>
+            <option value="-">−</option>
+            <option value="*">×</option>
+            <option value="/">÷</option>
+          </select>
+          <input
+            type="number"
+            id="angka_second"
+            placeholder="Angka 2"
+            required
+          />
         </div>
         <div>
-            <button onclick="hitung(event)">Hitung</button>
+          <input type="text" id="result" placeholder="Hasil" readonly />
         </div>
-    </form>
-</body>
+        <div>
+          <button type="submit">Hitung</button>
+          <button type="button" onclick="resetForm()">Reset</button>
+        </div>
+        <p id="error-msg" class="error"></p>
+      </form>
+
+      <button class="theme-toggle" id="toggleTheme">🌗 Ganti Tema</button>
+
+      <div class="history" id="history"></div>
+    </div>
+
+    <script>
+      const form = document.getElementById("calc-form");
+      const resultField = document.getElementById("result");
+      const errorMsg = document.getElementById("error-msg");
+      const historyDiv = document.getElementById("history");
+      const themeBtn = document.getElementById("toggleTheme");
+      const body = document.body;
+      let history = [];
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const num1 = parseFloat(document.getElementById("angka_first").value);
+        const num2 = parseFloat(document.getElementById("angka_second").value);
+        const op = document.getElementById("operation").value;
+
+        errorMsg.textContent = "";
+
+        if (isNaN(num1) || isNaN(num2)) {
+          errorMsg.textContent = "Masukkan angka yang valid!";
+          resultField.value = "";
+          return;
+        }
+
+        if (op === "/" && num2 === 0) {
+          errorMsg.textContent = "Tidak bisa membagi dengan nol!";
+          resultField.value = "";
+          return;
+        }
+
+        let hasil;
+        switch (op) {
+          case "+":
+            hasil = num1 + num2;
+            break;
+          case "-":
+            hasil = num1 - num2;
+            break;
+          case "*":
+            hasil = num1 * num2;
+            break;
+          case "/":
+            hasil = num1 / num2;
+            break;
+        }
+
+        hasil = Number.isInteger(hasil) ? hasil : hasil.toFixed(4);
+        resultField.value = hasil;
+
+        // Simpan ke history
+        const record = `${num1} ${op} ${num2} = ${hasil}`;
+        history.unshift(record);
+        renderHistory();
+      });
+
+      function resetForm() {
+        form.reset();
+        resultField.value = "";
+        errorMsg.textContent = "";
+      }
+
+      function renderHistory() {
+        historyDiv.innerHTML =
+          "<strong>Riwayat:</strong><br>" +
+          history
+            .slice(0, 10)
+            .map((h) => `<div class="history-item"><span>${h}</span></div>`)
+            .join("");
+      }
+
+      themeBtn.addEventListener("click", () => {
+        body.classList.toggle("dark");
+        themeBtn.textContent = body.classList.contains("dark")
+          ? "☀️ Mode Terang"
+          : "🌗 Ganti Tema";
+      });
+    </script>
+  </body>
 </html>
