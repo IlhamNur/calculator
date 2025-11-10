@@ -3,244 +3,233 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kalkulator Modern</title>
+    <title>Kalkulator Neon Glass</title>
     <style>
-      :root {
-        --bg: #f3f4f6;
-        --text: #333;
-        --card: #fff;
-        --button: #2563eb;
-        --button-hover: #1d4ed8;
-      }
-
-      body.dark {
-        --bg: #111827;
-        --text: #f9fafb;
-        --card: #1f2937;
-        --button: #3b82f6;
-        --button-hover: #60a5fa;
+      * {
+        box-sizing: border-box;
       }
 
       body {
-        font-family: "Segoe UI", Arial, sans-serif;
-        background: var(--bg);
-        color: var(--text);
+        font-family: "Poppins", sans-serif;
+        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        transition: background 0.3s, color 0.3s;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        overflow: hidden;
+        transition: background 0.4s ease;
       }
 
-      .calc-container {
-        background: var(--card);
-        padding: 25px 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        width: 340px;
+      .calculator {
+        backdrop-filter: blur(15px);
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 25px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+        padding: 25px;
+        width: 360px;
+        color: white;
         text-align: center;
-        transition: background 0.3s;
       }
 
-      h1 {
-        margin-bottom: 15px;
+      .display {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        font-size: 2.3rem;
+        padding: 20px;
+        text-align: right;
+        overflow-x: auto;
+        color: #f5f6fa;
+        box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s ease;
       }
 
-      input,
-      select {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 16px;
-        margin: 5px;
-        width: 80px;
-        text-align: center;
-        background: var(--card);
-        color: var(--text);
-        transition: background 0.3s, color 0.3s;
+      .display.animate {
+        transform: scale(1.05);
       }
 
-      #result {
-        background: #f9f9f9;
-        font-weight: bold;
-        color: #111;
-      }
-
-      body.dark #result {
-        background: #374151;
-        color: #fff;
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 20px;
       }
 
       button {
-        background-color: var(--button);
-        color: white;
+        background: rgba(255, 255, 255, 0.1);
         border: none;
-        padding: 10px 18px;
-        border-radius: 8px;
+        border-radius: 15px;
+        color: #f5f6fa;
+        font-size: 1.3rem;
+        padding: 15px;
         cursor: pointer;
-        margin: 10px 5px;
-        font-size: 15px;
-        transition: background-color 0.3s;
+        transition: all 0.25s ease;
+        backdrop-filter: blur(5px);
       }
 
       button:hover {
-        background-color: var(--button-hover);
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
       }
 
-      .error {
-        color: #dc2626;
-        font-size: 14px;
-        margin-top: 6px;
+      .operator {
+        background: rgba(255, 255, 255, 0.2);
+        color: #00a8ff;
+        box-shadow: 0 0 10px #00a8ff;
       }
 
-      .theme-toggle {
-        background: transparent;
-        border: 1px solid var(--text);
-        color: var(--text);
-        font-size: 14px;
-        padding: 6px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        margin-top: 10px;
+      .equal {
+        grid-column: span 2;
+        background: linear-gradient(90deg, #00a8ff, #9c88ff);
+        color: #fff;
+        box-shadow: 0 0 15px #00a8ff;
+      }
+
+      .clear {
+        background: rgba(255, 99, 71, 0.3);
+        box-shadow: 0 0 10px #ff6347;
       }
 
       .history {
-        text-align: left;
-        margin-top: 20px;
-        font-size: 14px;
-        max-height: 150px;
+        margin-top: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 10px;
+        max-height: 120px;
         overflow-y: auto;
-        border-top: 1px solid #ccc;
-        padding-top: 10px;
+        font-size: 0.9rem;
+        text-align: left;
       }
 
       .history-item {
-        margin: 4px 0;
-        font-family: monospace;
+        color: #dcdde1;
+        margin-bottom: 4px;
+        cursor: pointer;
+        transition: 0.2s;
       }
 
-      .history-item span {
-        color: #2563eb;
+      .history-item:hover {
+        color: #00a8ff;
       }
 
-      body.dark .history-item span {
-        color: #60a5fa;
+      .dark-toggle {
+        margin-top: 10px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #aaa;
+      }
+
+      /* Light Mode */
+      body.light {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        color: #2f3640;
+      }
+      body.light .calculator {
+        background: rgba(255, 255, 255, 0.4);
+        color: #2f3640;
+      }
+      body.light .display {
+        background: rgba(0, 0, 0, 0.1);
+        color: #2f3640;
+      }
+      body.light button {
+        color: #2f3640;
       }
     </style>
   </head>
   <body>
-    <div class="calc-container">
-      <h1>Kalkulator Modern</h1>
-      <form id="calc-form">
-        <div>
-          <input
-            type="number"
-            id="angka_first"
-            placeholder="Angka 1"
-            required
-          />
-          <select id="operation">
-            <option value="+">+</option>
-            <option value="-">−</option>
-            <option value="*">×</option>
-            <option value="/">÷</option>
-          </select>
-          <input
-            type="number"
-            id="angka_second"
-            placeholder="Angka 2"
-            required
-          />
-        </div>
-        <div>
-          <input type="text" id="result" placeholder="Hasil" readonly />
-        </div>
-        <div>
-          <button type="submit">Hitung</button>
-          <button type="button" onclick="resetForm()">Reset</button>
-        </div>
-        <p id="error-msg" class="error"></p>
-      </form>
+    <div class="calculator">
+      <div id="display" class="display">0</div>
 
-      <button class="theme-toggle" id="toggleTheme">🌗 Ganti Tema</button>
+      <div class="buttons">
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button onclick="appendInput('(')">(</button>
+        <button onclick="appendInput(')')">)</button>
+        <button class="operator" onclick="appendInput('/')">÷</button>
+
+        <button onclick="appendInput('7')">7</button>
+        <button onclick="appendInput('8')">8</button>
+        <button onclick="appendInput('9')">9</button>
+        <button class="operator" onclick="appendInput('*')">×</button>
+
+        <button onclick="appendInput('4')">4</button>
+        <button onclick="appendInput('5')">5</button>
+        <button onclick="appendInput('6')">6</button>
+        <button class="operator" onclick="appendInput('-')">−</button>
+
+        <button onclick="appendInput('1')">1</button>
+        <button onclick="appendInput('2')">2</button>
+        <button onclick="appendInput('3')">3</button>
+        <button class="operator" onclick="appendInput('+')">+</button>
+
+        <button onclick="appendInput('0')">0</button>
+        <button onclick="appendInput('.')">.</button>
+        <button class="equal" onclick="calculate()">=</button>
+      </div>
 
       <div class="history" id="history"></div>
+      <div class="dark-toggle" onclick="toggleMode()">🌙 / ☀️ Mode</div>
     </div>
 
+    <audio id="clickSound" src="click.mp3"></audio>
+
     <script>
-      const form = document.getElementById("calc-form");
-      const resultField = document.getElementById("result");
-      const errorMsg = document.getElementById("error-msg");
-      const historyDiv = document.getElementById("history");
-      const themeBtn = document.getElementById("toggleTheme");
-      const body = document.body;
-      let history = [];
+      const display = document.getElementById("display");
+      const historyContainer = document.getElementById("history");
+      const clickSound = document.getElementById("clickSound");
+      let darkMode = true;
 
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const num1 = parseFloat(document.getElementById("angka_first").value);
-        const num2 = parseFloat(document.getElementById("angka_second").value);
-        const op = document.getElementById("operation").value;
-
-        errorMsg.textContent = "";
-
-        if (isNaN(num1) || isNaN(num2)) {
-          errorMsg.textContent = "Masukkan angka yang valid!";
-          resultField.value = "";
-          return;
-        }
-
-        if (op === "/" && num2 === 0) {
-          errorMsg.textContent = "Tidak bisa membagi dengan nol!";
-          resultField.value = "";
-          return;
-        }
-
-        let hasil;
-        switch (op) {
-          case "+":
-            hasil = num1 + num2;
-            break;
-          case "-":
-            hasil = num1 - num2;
-            break;
-          case "*":
-            hasil = num1 * num2;
-            break;
-          case "/":
-            hasil = num1 / num2;
-            break;
-        }
-
-        hasil = Number.isInteger(hasil) ? hasil : hasil.toFixed(4);
-        resultField.value = hasil;
-
-        // Simpan ke history
-        const record = `${num1} ${op} ${num2} = ${hasil}`;
-        history.unshift(record);
-        renderHistory();
-      });
-
-      function resetForm() {
-        form.reset();
-        resultField.value = "";
-        errorMsg.textContent = "";
+      function playClick() {
+        clickSound.currentTime = 0;
+        clickSound.play();
       }
 
-      function renderHistory() {
-        historyDiv.innerHTML =
-          "<strong>Riwayat:</strong><br>" +
-          history
-            .slice(0, 10)
-            .map((h) => `<div class="history-item"><span>${h}</span></div>`)
-            .join("");
+      function appendInput(value) {
+        playClick();
+        if (display.textContent === "0" || display.textContent === "Error")
+          display.textContent = "";
+        display.textContent += value;
       }
 
-      themeBtn.addEventListener("click", () => {
-        body.classList.toggle("dark");
-        themeBtn.textContent = body.classList.contains("dark")
-          ? "☀️ Mode Terang"
-          : "🌗 Ganti Tema";
+      function clearDisplay() {
+        playClick();
+        display.textContent = "0";
+      }
+
+      function calculate() {
+        playClick();
+        try {
+          const exp = display.textContent;
+          const result = eval(exp);
+          display.textContent = result;
+          display.classList.add("animate");
+          setTimeout(() => display.classList.remove("animate"), 200);
+          addHistory(exp, result);
+        } catch {
+          display.textContent = "Error";
+        }
+      }
+
+      function addHistory(exp, res) {
+        const item = document.createElement("div");
+        item.classList.add("history-item");
+        item.textContent = `${exp} = ${res}`;
+        item.onclick = () => (display.textContent = res);
+        historyContainer.prepend(item);
+      }
+
+      function toggleMode() {
+        playClick();
+        darkMode = !darkMode;
+        document.body.classList.toggle("light", !darkMode);
+      }
+
+      // Keyboard support
+      document.addEventListener("keydown", (e) => {
+        if (/[0-9+\-*/.()]/.test(e.key)) appendInput(e.key);
+        else if (e.key === "Enter") calculate();
+        else if (e.key === "Backspace")
+          display.textContent = display.textContent.slice(0, -1) || "0";
+        else if (e.key.toLowerCase() === "c") clearDisplay();
       });
     </script>
   </body>
